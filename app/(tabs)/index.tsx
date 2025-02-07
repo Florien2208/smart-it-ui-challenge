@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
@@ -14,7 +14,7 @@ const Header = styled.View`
   background-color: #4461f2;
   padding: 20px;
   padding-top: 60px;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 `;
 
 const Greeting = styled.Text`
@@ -71,13 +71,7 @@ const SectionTitle = styled.Text`
   font-size: 24px;
   font-weight: bold;
   color: #000;
-  margin-bottom: 16px;
-`;
-
-const JobCardsContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  margin-bottom: 20px;
 `;
 
 const JobCard = styled.View`
@@ -98,7 +92,7 @@ const CompanyRow = styled.View`
 const CompanyLogo = styled.Image`
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 20px;
 `;
 
 const BookmarkButton = styled.TouchableOpacity`
@@ -122,13 +116,14 @@ const JobTitle = styled.Text`
   font-size: 18px;
   font-weight: bold;
   color: #000;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  margin-top:20px;
 `;
 
 const JobTypeContainer = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
-  margin-bottom: 16px;
+  margin-bottom: 30px;
 `;
 
 const JobTypeText = styled.Text`
@@ -183,9 +178,11 @@ const RecentJobInfo = styled.View`
 const TimeAgo = styled.Text`
   font-size: 14px;
   color: #666;
-  margin-left: auto;
+  margin-top: auto;
 `;
-
+const JobCardsContainer = styled(ScrollView)`
+  flex: 1;
+`;
 const BottomNav = styled.View`
   flex-direction: row;
   justify-content: space-around;
@@ -199,14 +196,27 @@ type NavigationProps = {
 };
 export default function HomeScreen() {
   const router = useRouter();
-  return(
+  return (
     <Container>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <Header>
           <Greeting>Hello</Greeting>
           <Name>Leslie Alexander</Name>
           <NotificationIcon>
-            <Icon name="bell" size={24} color="#fff" />
+            <View style={{ position: "relative" }}>
+              <Icon name="bell-o" size={24} color="#fff" />
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  width: 8,
+                  height: 8,
+                  backgroundColor: "#FF4444",
+                  borderRadius: 4,
+                }}
+              />
+            </View>
           </NotificationIcon>
         </Header>
 
@@ -222,18 +232,28 @@ export default function HomeScreen() {
 
         <ContentContainer>
           <SectionTitle>Recomendation</SectionTitle>
-          <JobCardsContainer>
-            <JobCard>
+          <JobCardsContainer
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingHorizontal: 20,
+              gap: 16,
+            }}
+          >
+            <JobCard style={{ width: 250 }}>
               <CompanyRow>
-                <CompanyLogo
-                  source={{ uri: "https://example.com/pinterest-logo.png" }}
-                />
+                <CompanyLogo source={require("@/assets/images/download.png")} />
+                <View style={{ flex: 1, marginLeft: 18 }}>
+                  <CompanyName>Pinterest, Inc.</CompanyName>
+                  <Location>California, USA</Location>
+                </View>
                 <BookmarkButton>
                   <Icon name="bookmark-o" size={20} color="#666" />
                 </BookmarkButton>
               </CompanyRow>
-              <CompanyName>Pinterest, Inc.</CompanyName>
-              <Location>California, USA</Location>
+
               <JobTitle>Motion Designer</JobTitle>
               <JobTypeContainer>
                 <JobTypeText>Senior</JobTypeText>
@@ -246,24 +266,29 @@ export default function HomeScreen() {
                 <ApplyButton onPress={() => router.push("/job_detail")}>
                   <ApplyButtonText>Apply Now</ApplyButtonText>
                 </ApplyButton>
-                <View>
-                  <Salary>$7K</Salary>
-                  <SalaryPeriod>/Month</SalaryPeriod>
-                </View>
+
+                <Salary
+                  style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}
+                >
+                  $7K
+                  <SalaryPeriod style={{ fontSize: 14, color: "#666" }}>
+                    /Month
+                  </SalaryPeriod>
+                </Salary>
               </JobFooter>
             </JobCard>
 
-            <JobCard>
+            <JobCard style={{ width: 250 }}>
               <CompanyRow>
-                <CompanyLogo
-                  source={{ uri: "https://example.com/facebook-logo.png" }}
-                />
+                <CompanyLogo source={require("@/assets/images/facebook.png")} />
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                  <CompanyName>Facebook</CompanyName>
+                  <Location>California, USA</Location>
+                </View>
                 <BookmarkButton>
                   <Icon name="bookmark-o" size={20} color="#666" />
                 </BookmarkButton>
               </CompanyRow>
-              <CompanyName>Facebook</CompanyName>
-              <Location>California, USA</Location>
               <JobTitle>UI Designer</JobTitle>
               <JobTypeContainer>
                 <JobTypeText>Senior</JobTypeText>
@@ -273,40 +298,80 @@ export default function HomeScreen() {
                 <JobTypeText>Remote</JobTypeText>
               </JobTypeContainer>
               <JobFooter>
-                <ApplyButton>
+                <ApplyButton onPress={() => router.push("/job_detail")}>
                   <ApplyButtonText>Apply Now</ApplyButtonText>
                 </ApplyButton>
-                <View>
-                  <Salary>$7K</Salary>
-                  <SalaryPeriod>/Month</SalaryPeriod>
-                </View>
+                <Salary
+                  style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}
+                >
+                  $7K
+                  <SalaryPeriod style={{ fontSize: 14, color: "#666" }}>
+                    /Month
+                  </SalaryPeriod>
+                </Salary>
               </JobFooter>
             </JobCard>
           </JobCardsContainer>
 
           <SectionTitle>Recent Job List</SectionTitle>
-          <RecentJobCard>
-            <CompanyLogo
-              source={{ uri: "https://example.com/google-logo.png" }}
-            />
-            <RecentJobInfo>
-              <JobTitle>Product Designer</JobTitle>
-              <JobTypeContainer>
-                <JobTypeText>Senior</JobTypeText>
-                <JobTypeText>•</JobTypeText>
-                <JobTypeText>Fulltime</JobTypeText>
-                <JobTypeText>•</JobTypeText>
-                <JobTypeText>Remote</JobTypeText>
-              </JobTypeContainer>
-              <Salary>
-                $5K<SalaryPeriod>/Month</SalaryPeriod>
-              </Salary>
-            </RecentJobInfo>
-            <TimeAgo>12 Minute Ago</TimeAgo>
-            <BookmarkButton>
-              <Icon name="bookmark-o" size={20} color="#666" />
-            </BookmarkButton>
-          </RecentJobCard>
+          <View
+            style={{
+              backgroundColor: "#F6F7FB",
+              borderRadius: 12,
+              padding: 16,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
+              >
+                <CompanyLogo
+                  source={require("@/assets/images/google-logo.webp")}
+                />
+                <View style={{ marginLeft: 12 }}>
+                  <JobTitle style={{ fontSize: 16, marginBottom: 4 }}>
+                    Product Designer
+                  </JobTitle>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ color: "#666", fontSize: 14 }}>Senior</Text>
+                    <Text style={{ color: "#666", marginHorizontal: 4 }}>
+                      •
+                    </Text>
+                    <Text style={{ color: "#666", fontSize: 14 }}>
+                      Fulltime
+                    </Text>
+                    <Text style={{ color: "#666", marginHorizontal: 4 }}>
+                      •
+                    </Text>
+                    <Text style={{ color: "#666", fontSize: 14 }}>Remote</Text>
+                  </View>
+                </View>
+              </View>
+              <BookmarkButton>
+                <Icon name="bookmark-o" size={20} color="#666" />
+              </BookmarkButton>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginTop: 12,
+                marginLeft: 50,
+              }}
+            >
+              <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                $5K<Text style={{ fontSize: 14, color: "#666" }}>/Month</Text>
+              </Text>
+              <TimeAgo>12 Minute Ago</TimeAgo>
+            </View>
+          </View>
         </ContentContainer>
       </ScrollView>
     </Container>
