@@ -1,216 +1,135 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
+  SafeAreaView,
   View,
   Text,
-  Image,
-  ScrollView,
   TouchableOpacity,
-  StyleSheet,
-  Dimensions,
+  Animated,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
+import styled from "styled-components/native";
 
-const ProfileScreen = () => {
-  // Mock user data - in a real app, this would come from props or state
-  const user = {
-    name: "Sarah Johnson",
-    role: "Senior Product Designer",
-    location: "San Francisco, CA",
-    followers: 1234,
-    following: 567,
-    projects: 48,
-    bio: "Passionate about creating beautiful and functional user experiences. Leading design at TechCorp.",
-    skills: [
-      "UI/UX Design",
-      "Prototyping",
-      "User Research",
-      "Design Systems",
-      "Team Leadership",
-    ],
-    stats: [
-      { label: "Projects", value: "48" },
-      { label: "Reviews", value: "126" },
-      { label: "Clients", value: "29" },
-    ],
-  };
+const Container = styled.SafeAreaView`
+  flex: 1;
+  background-color: #ffffff;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
 
-  const StatBox = ({ label, value }) => (
-    <View style={styles.statBox}>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </View>
-  );
+const IllustrationContainer = styled.View`
+  align-items: center;
+  margin-bottom: 40px;
+`;
 
-  const SkillTag = ({ skill }) => (
-    <View style={styles.skillTag}>
-      <Text style={styles.skillText}>{skill}</Text>
-    </View>
-  );
+const Title = styled.Text`
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
+const Description = styled.Text`
+  font-size: 16px;
+  color: #666;
+  text-align: center;
+  line-height: 24px;
+  margin-bottom: 32px;
+  padding-horizontal: 20px;
+`;
+
+const Button = styled.TouchableOpacity`
+  background-color: #4461f2;
+  padding: 16px 32px;
+  border-radius: 12px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ButtonText = styled.Text`
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 8px;
+`;
+
+export default function UnderDevelopmentScreen() {
+  const [animation] = React.useState(new Animated.Value(0));
+  const router = useRouter();
+  React.useEffect(() => {
+    const pulse = Animated.sequence([
+      Animated.timing(animation, {
+        toValue: 1,
+        duration: 1500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animation, {
+        toValue: 0,
+        duration: 1500,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    Animated.loop(pulse).start();
+  }, []);
+
+  const scale = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.1],
+  });
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <Image
-          source={{ uri: "https://via.placeholder.com/150" }}
-          style={styles.profileImage}
-        />
-        <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.editButton}>
-            <Feather name="edit" size={20} color="#FFF" />
-            <Text style={styles.editButtonText}>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
-            <Feather name="settings" size={24} color="#333" />
-          </TouchableOpacity>
-        </View>
-      </View>
+    <Container>
+      <IllustrationContainer>
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <View style={{ alignItems: "center" }}>
+            {/* Developer Icon Circle */}
+            <View
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 60,
+                backgroundColor: "#4461F2",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 20,
+              }}
+            >
+              <Icon name="code" size={50} color="#fff" />
+            </View>
 
-      {/* User Info Section */}
-      <View style={styles.userInfo}>
-        <Text style={styles.name}>{user.name}</Text>
-        <Text style={styles.role}>{user.role}</Text>
-        <View style={styles.locationContainer}>
-          <Feather name="map-pin" size={16} color="#666" />
-          <Text style={styles.location}>{user.location}</Text>
-        </View>
-      </View>
+            {/* Animated Dots */}
+            <View style={{ flexDirection: "row", marginTop: 20 }}>
+              {[0, 1, 2].map((index) => (
+                <View
+                  key={index}
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 6,
+                    backgroundColor: "#4461F2",
+                    margin: 4,
+                    opacity: 0.6,
+                  }}
+                />
+              ))}
+            </View>
+          </View>
+        </Animated.View>
+      </IllustrationContainer>
 
-      {/* Stats Section */}
-      <View style={styles.statsContainer}>
-        {user.stats.map((stat, index) => (
-          <StatBox key={index} label={stat.label} value={stat.value} />
-        ))}
-      </View>
+      <Title>Profile Page Under Development</Title>
+      <Description>
+        We're working hard to bring you something amazing! This feature will be
+        available soon with enhanced functionality and a great user experience.
+      </Description>
 
-      {/* Bio Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About</Text>
-        <Text style={styles.bio}>{user.bio}</Text>
-      </View>
-
-      {/* Skills Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Skills</Text>
-        <View style={styles.skillsContainer}>
-          {user.skills.map((skill, index) => (
-            <SkillTag key={index} skill={skill} />
-          ))}
-        </View>
-      </View>
-    </ScrollView>
+      <Button onPress={() => router.push("/")}>
+        <Icon name="arrow-left" size={20} color="#fff" />
+        <ButtonText >Go Back</ButtonText>
+      </Button>
+    </Container>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    padding: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  headerActions: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  editButton: {
-    backgroundColor: "#007AFF",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  editButtonText: {
-    color: "#FFF",
-    marginLeft: 8,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  iconButton: {
-    padding: 8,
-  },
-  userInfo: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  role: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 8,
-  },
-  locationContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  location: {
-    marginLeft: 4,
-    color: "#666",
-  },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 20,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#EEEEEE",
-  },
-  statBox: {
-    alignItems: "center",
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 14,
-    color: "#666",
-  },
-  section: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 12,
-  },
-  bio: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: "#444",
-  },
-  skillsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  skillTag: {
-    backgroundColor: "#F0F0F0",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  skillText: {
-    color: "#333",
-    fontSize: 14,
-  },
-});
-
-export default ProfileScreen;
+}
